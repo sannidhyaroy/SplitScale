@@ -1,8 +1,8 @@
 const tailscaleDaemonUrl = 'http://127.0.0.1:5000';
-let activeDomain = null; // Track the currently active domain
+let activeDomains = new Set(); // Set to track active domains that require Tailscale
 
 async function updateTailscaleState(shouldEnable, exitNode = null) {
-    if (shouldEnable && activeDomain === null) {
+    if (shouldEnable) {
         const response = await fetch(`${tailscaleDaemonUrl}/tailscale/up`, {
             method: 'POST',
             headers: {
@@ -12,19 +12,47 @@ async function updateTailscaleState(shouldEnable, exitNode = null) {
         });
 
         if (response.ok) {
-            activeDomain = exitNode;
-            console.log('Tailscale enabled for domain:', activeDomain);
+            console.log('Tailscale enabled for domain:', exitNode);
+        } else {
+            console.error('Failed to enable Tailscale');
         }
-    } else if (!shouldEnable && activeDomain !== null) {
+    } else {
         const response = await fetch(`${tailscaleDaemonUrl}/tailscale/down`, {
             method: 'POST'
         });
 
         if (response.ok) {
-            console.log('Tailscale disabled for domain:', activeDomain);
-            activeDomain = null;
+            console.log('Tailscale disabled');
+        } else {
+            console.error('Failed to disable Tailscale');
         }
     }
+}
+
+function handleDomainForTab(tabId, domain) {
+    chrome.storage.sync.get(['domainSettings'], function(data) {
+        const domainSettings = data.domainSettings || {};
+
+        if (domainSettings[domain]) {
+            const exitNode = domainSettings[domain].exitNode;
+
+            // If the domain is not in the activeDomains set, enable Tailscale
+            if (!activeDomains.has(domain)) {
+                activeDomains.add(domain);
+                updateTailscaleState(true, exitNode);
+            }
+        } else {
+            // If the domain is in the activeDomains set but no longer needed, disable Tailscale
+            if (activeDomains.has(domain)) {
+                activeDomains.delete(domain);
+
+                // Check if there are any other active domains
+                if (activeDomains.size === 0) {
+                    updateTailscaleState(false);
+                }
+            }
+        }
+    });
 }
 
 chrome.webRequest.onBeforeRequest.addListener(
@@ -32,22 +60,9 @@ chrome.webRequest.onBeforeRequest.addListener(
         const url = new URL(details.url);
         const domain = url.hostname;
 
-        chrome.storage.sync.get(['domainSettings'], function(data) {
-            const domainSettings = data.domainSettings || {};
-
-            if (domainSettings[domain]) {
-                const exitNode = domainSettings[domain].exitNode;
-
-                // If the domain matches and Tailscale isn't already enabled, enable it
-                if (activeDomain !== domain) {
-                    updateTailscaleState(true, exitNode);
-                }
-            } else {
-                // If the domain doesn't match and Tailscale is enabled, disable it
-                if (activeDomain !== null) {
-                    updateTailscaleState(false);
-                }
-            }
+        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+            const tabId = tabs[0].id;
+            handleDomainForTab(tabId, domain);
         });
 
         return {};
@@ -58,31 +73,33 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
-//        chrome.tabs.get(tabId, function(tab) {
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            var tab = tabs[0];
-            var url = new URL(tab.url);
-            var domain = url.hostname;
-
-            chrome.storage.sync.get(['domainSettings'], function(data) {
-                const domainSettings = data.domainSettings || {};
-
-                if (domainSettings[domain]) {
-                    const exitNode = domainSettings[domain].exitNode;
-
-                    if (activeDomain !== domain) {
-                        updateTailscaleState(true, exitNode);
-                    }
-                } else if (activeDomain !== null) {
-                    updateTailscaleState(false);
-                }
-            });
-        });
+        const url = new URL(tab.url);
+        const domain = url.hostname;
+        handleDomainForTab(tabId, domain);
     }
 });
 
-//chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
-//    if (activeDomain !== null) {
-//        updateTailscaleState(false);
-//    }
-//});
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+    chrome.tabs.get(tabId, function(tab) {
+        if (tab && tab.url) {
+            const url = new URL(tab.url);
+            const domain = url.hostname;
+
+            if (activeDomains.has(domain)) {
+                activeDomains.delete(domain);
+
+                // Check if any other tabs are using this domain or other active domains
+                chrome.tabs.query({}, function(tabs) {
+                    const isDomainStillActive = tabs.some(t => {
+                        const tDomain = new URL(t.url).hostname;
+                        return activeDomains.has(tDomain);
+                    });
+
+                    if (!isDomainStillActive) {
+                        updateTailscaleState(false);
+                    }
+                });
+            }
+        }
+    });
+});
