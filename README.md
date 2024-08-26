@@ -19,8 +19,37 @@ Bypass SOPHOS over Tailscale intelligently
 - Test if Tailscale is working correctly by running `tailscale up`. If you aren't logged in, the CLI should provide a link, to login with your Tailscale account (or create one, if you haven't already). You may or may not need a `sudo` prefix to the command.
 - At this point, if at least two devices are connected to Tailscale, you can run `tailscale status` and you should see the two devices listed along with their Tailscale IP and status.
 - Prepare to configure one of the devices as an exit-node by running `tailscale up --advertise-exit-node`, then allow the exit-node request of the device from the [admin console](https://login.tailscale.com/admin/machines), by clicking the `ellipsis icon menu` of the exit node device, then open the `Edit route` settings panel, and enable `Use as exit node`. Refer to [Advertise a device as an exit node](https://tailscale.com/kb/1103/exit-nodes#advertise-a-device-as-an-exit-node) section and [Allow the exit node from the admin console](https://tailscale.com/kb/1103/exit-nodes#allow-the-exit-node-from-the-admin-console) for more info.
-- Clone this repository by running `git clone https://github.com/sannidhyaroy/SOPHOS-Relay`.
-- Run the daemon temporarily by running `python <directory to daemon.py>`. Or, you can run it as a proper daemon, detached from the console, by following [this article](https://medium.com/@guemandeuhassler96/run-your-python-script-as-a-linux-daemon-9a82ed427c1a). Since, this project isn't stable for production, we'll run the daemon temporarily inside our terminal, that can be stopped with `Ctrl/Cmd + C`.
+- Clone this repository:
+  ```bash
+  git clone https://github.com/sannidhyaroy/SOPHOS-Relay
+  ```
+- Install Flask, if it is not installed already:
+  ```bash
+  pip install Flask
+  ```
+- Optionally, for testing purposes, you can utilize [Python Virtual Environments](https://docs.python.org/3/library/venv.html):
+  - Ensure you're inside the repository folder, then create a Python Virtual Environment:
+    ```bash
+    python -m venv venv
+    ```
+  - Activate the Virtual Environment:
+      - For Windows:
+        ```
+        venv\Scripts\activate
+        ```
+        - For macOS or Linux:
+        ```bash
+        source venv/bin/activate
+        ```
+  - Install Dependencies from `requirements.txt`:
+    ```bash
+    pip install -r requirements.txt
+    ```
+  - Verify Dependency Installation:
+    ```bash
+    pip list
+    ```
+- Run the daemon temporarily by running `python <directory to daemon.py>`. Or, you can run it as a proper daemon, detached from the console, by following [this article](https://medium.com/@guemandeuhassler96/run-your-python-script-as-a-linux-daemon-9a82ed427c1a). Since, this project isn't stable for production, we'll run the daemon temporarily inside our terminal, that can be stopped with `Ctrl/Cmd + C`. You can deactivate Python Virtual Environment after stopping the daemon by running `deactivate`.
 - Open you browser (based on Chromium), navigate to `chrome://extensions` (browsers may rewrite the url as necessary, if it isn't Chrome). Then turn on `Developer Mode` toggle and click `Load Unpacked`. Choose the `extensions` directory inside this repository.
 - Navigate to the `SOPHOS Relay` Extension Settings Page and map required domains to an exit-node IP. You can obtain the exit-node IP address of a device by running `tailscale status` and noting down the IP of the device advertising as exit node.
 - Try testing by going to one of the configured domains and the extension should sent a request to the daemon process to use the configured device as an exit-node.
@@ -32,4 +61,4 @@ Bypass SOPHOS over Tailscale intelligently
 ---
 
 ### License
-SOPHOS Relay is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE).
+SOPHOS Relay is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE)
