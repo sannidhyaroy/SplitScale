@@ -27,9 +27,9 @@ Bypass SOPHOS over Tailscale intelligently
 ---
 
 ### Privacy Considerations:
-- SOPHOS Relay is fully open-source, licensed with the AGPL License. We are in no way affiliated or partnered to Tailsacle.
-- Tailscale is mostly open-source at it's core, except their coordination server. However, they encourage open-source projects like [Headscale](https://github.com/juanfont/headscale), that can be configured to act as a self-hosted Tailscale Coordination Server instead. You can read more about "Open-Source at Tailscale" on their [Open Source page](https://tailscale.com/opensource). The instructions provided for SOPHOS Relay assumes you're using the default Tailscale Coordination Server and their official client apps or cli.
+- SOPHOS Relay is fully open-source, licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE). We are in no way affiliated to or partnered with Tailscale.
+- Tailscale is a partially open-source tool with some proprietary components, such as the Tailscale Coordination Server. Our project works with Tailscale’s existing setup and does not modify or distribute Tailscale’s proprietary software. Users must comply with Tailscale’s terms of service and licensing. For a fully open-source alternative to Tailscale’s coordination server, users might consider using [Headscale](https://github.com/juanfont/headscale). The instructions provided for this project assumes you're using the default Tailscale Coordination Server and their official client apps or cli, but it should work with Headscale as well. Read more at ["Open-Source at Tailscale"](https://tailscale.com/opensource).
 ---
 
 ### License
-SOPHOS Relay is licensed by the AGPL License
+SOPHOS Relay is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE).
