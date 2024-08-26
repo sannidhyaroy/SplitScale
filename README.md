@@ -61,4 +61,4 @@ Bypass SOPHOS over Tailscale intelligently
 ---
 
 ### License
-SOPHOS Relay is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE).
+SOPHOS Relay is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE)
