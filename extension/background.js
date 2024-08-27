@@ -2,12 +2,9 @@ const tailscaleDaemonUrl = 'http://127.0.0.1:5000';
 let activeDomains = new Set(); // Set to track active domains that require Tailscale
 let tabDomainMap = {}; // Map to track domain associated with each tab
 
-// Function to extract the main domain (e.g., "example.com" from "www.example.com")
 function extractDomain(url) {
     const domain = (new URL(url)).hostname;
     const domainParts = domain.split('.').filter(part => part !== 'www');
-
-    // Return the last two parts of the domain (e.g., "example.com")
     return domainParts.slice(-2).join('.');
 }
 
@@ -109,15 +106,36 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     console.log('Tab removed. TabId:', tabId);
 
-    const domain = tabDomainMap[tabId];
-    if (domain && activeDomains.has(domain)) {
-        console.log('Removing domain from activeDomains on tab removal:', domain);
-        activeDomains.delete(domain);
+    const removedDomain = tabDomainMap[tabId];
+    if (removedDomain && activeDomains.has(removedDomain)) {
+        console.log('Removing domain from activeDomains on tab removal:', removedDomain);
+        activeDomains.delete(removedDomain);
         delete tabDomainMap[tabId];
 
-        if (activeDomains.size === 0) {
-            console.log('No active domains remaining. Disabling Tailscale.');
-            updateTailscaleState(false);
-        }
+        // Check for remaining active domains
+        chrome.tabs.query({}, function(tabs) {
+            const remainingDomains = new Set();
+            tabs.forEach(t => {
+                const domain = extractDomain(t.url);
+                if (activeDomains.has(domain)) {
+                    remainingDomains.add(domain);
+                }
+            });
+
+            if (remainingDomains.size > 0) {
+                console.log('Switching Tailscale to the remaining active domain.');
+                const remainingDomain = [...remainingDomains][0]; // Choose one of the remaining domains
+                chrome.storage.sync.get(['domainSettings'], function(data) {
+                    const domainSettings = data.domainSettings || {};
+                    if (domainSettings[remainingDomain]) {
+                        const exitNode = domainSettings[remainingDomain].exitNode;
+                        updateTailscaleState(true, exitNode);
+                    }
+                });
+            } else {
+                console.log('No active domains remaining. Disabling Tailscale.');
+                updateTailscaleState(false);
+            }
+        });
     }
 });
