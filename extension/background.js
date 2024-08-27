@@ -1,6 +1,7 @@
 const tailscaleDaemonUrl = 'http://127.0.0.1:5000';
 let activeDomains = new Set(); // Set to track active domains that require Tailscale
 let tabDomainMap = {}; // Map to track domain associated with each tab
+let currentExitNode = null; // Track the currently active exit node
 
 function extractDomain(url) {
     const domain = (new URL(url)).hostname;
@@ -12,6 +13,11 @@ async function updateTailscaleState(shouldEnable, exitNode = null) {
     console.log('updateTailscaleState called with shouldEnable:', shouldEnable, 'and exitNode:', exitNode);
 
     if (shouldEnable) {
+        if (exitNode === currentExitNode) {
+            console.log('Exit node already active. No need to switch.');
+            return;
+        }
+
         try {
             const response = await fetch(`${tailscaleDaemonUrl}/tailscale/up`, {
                 method: 'POST',
@@ -22,6 +28,7 @@ async function updateTailscaleState(shouldEnable, exitNode = null) {
             });
 
             if (response.ok) {
+                currentExitNode = exitNode;
                 console.log('Tailscale enabled for domain:', exitNode);
             } else {
                 console.error('Failed to enable Tailscale. Status:', response.status, 'Status Text:', response.statusText);
@@ -36,6 +43,7 @@ async function updateTailscaleState(shouldEnable, exitNode = null) {
             });
 
             if (response.ok) {
+                currentExitNode = null;
                 console.log('Tailscale disabled');
             } else {
                 console.error('Failed to disable Tailscale. Status:', response.status, 'Status Text:', response.statusText);
@@ -60,6 +68,9 @@ function handleDomainForTab(tabId, domain) {
                 console.log('Adding domain to activeDomains and enabling Tailscale:', domain);
                 activeDomains.add(domain);
                 tabDomainMap[tabId] = domain; // Map the domain to the tab
+                updateTailscaleState(true, exitNode);
+            } else if (!(currentExitNode === exitNode)) {
+                console.log('Domain already in activeDomains, but current exit-node incorrect. Updating exit-node to ', exitNode);
                 updateTailscaleState(true, exitNode);
             }
         } else {
