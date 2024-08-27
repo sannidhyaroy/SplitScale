@@ -1,5 +1,5 @@
-# SOPHOS Relay
-Bypass SOPHOS over Tailscale intelligently
+# SplitScale
+A Split Tunneling Solution through Tailscale based on domain matching
 
 ### Prerequisites (will be covered in Instructions):
 - A Tailscale Account
@@ -21,7 +21,7 @@ Bypass SOPHOS over Tailscale intelligently
 - Prepare to configure one of the devices as an exit-node by running `tailscale up --advertise-exit-node`, then allow the exit-node request of the device from the [admin console](https://login.tailscale.com/admin/machines), by clicking the `ellipsis icon menu` of the exit node device, then open the `Edit route` settings panel, and enable `Use as exit node`. Refer to [Advertise a device as an exit node](https://tailscale.com/kb/1103/exit-nodes#advertise-a-device-as-an-exit-node) section and [Allow the exit node from the admin console](https://tailscale.com/kb/1103/exit-nodes#allow-the-exit-node-from-the-admin-console) for more info.
 - Clone this repository:
   ```bash
-  git clone https://github.com/sannidhyaroy/SOPHOS-Relay
+  git clone https://github.com/sannidhyaroy/SplitScale.git
   ```
 - Install Flask, if it is not installed already:
   ```bash
@@ -51,14 +51,14 @@ Bypass SOPHOS over Tailscale intelligently
     ```
 - Run the daemon temporarily by running `python <directory to daemon.py>`. Or, you can run it as a proper daemon, detached from the console, by following [this article](https://medium.com/@guemandeuhassler96/run-your-python-script-as-a-linux-daemon-9a82ed427c1a). Since, this project isn't stable for production, we'll run the daemon temporarily inside our terminal, that can be stopped with `Ctrl/Cmd + C`. You can deactivate Python Virtual Environment after stopping the daemon by running `deactivate`.
 - Open you browser (based on Chromium), navigate to `chrome://extensions` (browsers may rewrite the url as necessary, if it isn't Chrome). Then turn on `Developer Mode` toggle and click `Load Unpacked`. Choose the `extensions` directory inside this repository.
-- Navigate to the `SOPHOS Relay` Extension Settings Page and map required domains to an exit-node IP. You can obtain the exit-node IP address of a device by running `tailscale status` and noting down the IP of the device advertising as exit node.
+- Navigate to the `SplitScale` Extension Settings Page and map required domains to an exit-node IP. You can obtain the exit-node IP address of a device by running `tailscale status` and noting down the IP of the device advertising as exit node.
 - Try testing by going to one of the configured domains and the extension should sent a request to the daemon process to use the configured device as an exit-node.
 ---
 
 ### Privacy Considerations:
-- SOPHOS Relay is fully open-source, licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE). We are in no way affiliated to or partnered with Tailscale.
+- SplitScale is fully open-source, licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SplitScale/blob/main/LICENSE). We are in no way affiliated to or partnered with Tailscale.
 - Tailscale is a partially open-source tool with some proprietary components, such as the Tailscale Coordination Server. Our project works with Tailscale’s existing setup and does not modify or distribute Tailscale’s proprietary software. Users must comply with Tailscale’s terms of service and licensing. For a fully open-source alternative to Tailscale’s coordination server, users might consider using [Headscale](https://github.com/juanfont/headscale). The instructions provided for this project assumes you're using the default Tailscale Coordination Server and their official client apps or cli, but it should work with Headscale as well. Read more at ["Open-Source at Tailscale"](https://tailscale.com/opensource).
 ---
 
 ### License
-SOPHOS Relay is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SOPHOS-Relay/blob/main/LICENSE)
+SplitScale is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SplitScale/blob/main/LICENSE).
