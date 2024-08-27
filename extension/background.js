@@ -79,29 +79,40 @@ function handleDomainForTab(tabId, domain) {
     });
 }
 
-chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-        const domain = extractDomain(details.url);
-        console.log('webRequest onBeforeRequest for domain:', domain);
-
-        chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-            const tabId = tabs[0].id;
-            handleDomainForTab(tabId, domain);
-        });
-
-        return {};
-    },
-    { urls: ["<all_urls>"] },
-    ["blocking"]
-);
-
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
-        const domain = extractDomain(tab.url);
-        console.log('Tab updated. URL:', tab.url, 'Domain:', domain);
-        handleDomainForTab(tabId, domain);
+        const newDomain = extractDomain(tab.url);
+        console.log('Tab updated. URL:', tab.url, 'Domain:', newDomain);
+
+        const oldDomain = tabDomainMap[tabId];
+
+        // Remove the old domain from activeDomains if it exists
+        if (oldDomain && oldDomain !== newDomain && activeDomains.has(oldDomain)) {
+            console.log('Removing old domain from activeDomains:', oldDomain);
+            activeDomains.delete(oldDomain);
+
+            // If no other tabs are using the old domain, disable Tailscale for that domain
+            let oldDomainStillActive = false;
+            for (let id in tabDomainMap) {
+                if (tabDomainMap[id] === oldDomain) {
+                    oldDomainStillActive = true;
+                    break;
+                }
+            }
+            if (!oldDomainStillActive) {
+                console.log('No more tabs using old domain:', oldDomain, 'Disabling Tailscale for it.');
+                updateTailscaleState(false);
+            }
+        }
+
+        // Add the new domain to activeDomains and update the map
+        if (newDomain) {
+            tabDomainMap[tabId] = newDomain;
+            handleDomainForTab(tabId, newDomain);
+        }
     }
 });
+
 
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     console.log('Tab removed. TabId:', tabId);
@@ -137,5 +148,9 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
                 updateTailscaleState(false);
             }
         });
+    }
+    if (activeDomains.size === 0) {
+        console.log('No active domains remaining. Disabling Tailscale.');
+        updateTailscaleState(false);
     }
 });
