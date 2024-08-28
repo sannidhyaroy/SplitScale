@@ -26,6 +26,13 @@ venv/
 target/
 dist/
 
+# Extension Packages
+*.crx
+*.xpi
+
+# Pem files
+*.pem
+
 # JetBrains IDE
 .idea/
 
