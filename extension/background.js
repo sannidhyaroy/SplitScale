@@ -4,9 +4,18 @@ let tabDomainMap = {}; // Map to track domain associated with each tab
 let currentExitNode = null; // Track the currently active exit node
 
 function extractDomain(url) {
-    const domain = (new URL(url)).hostname;
-    const domainParts = domain.split('.').filter(part => part !== 'www');
-    return domainParts.slice(-2).join('.');
+    try {
+        const domain = (new URL(url)).hostname;
+        const domainParts = domain.split('.').filter(part => part !== 'www');
+        return domainParts.slice(-2).join('.');
+    } catch (error) {
+        if (url === undefined) {
+            console.log('URL is empty!');
+        } else {
+        console.error('Error extracting domain from URL:', url, error);
+        }
+        return null;
+    }
 }
 
 async function updateTailscaleState(shouldEnable, exitNode = null) {
@@ -56,6 +65,11 @@ async function updateTailscaleState(shouldEnable, exitNode = null) {
 
 function handleDomainForTab(tabId, domain) {
     console.log('handleDomainForTab called with tabId:', tabId, 'and domain:', domain);
+
+    if (!domain) {
+        console.warn('Domain is null or undefined, skipping Tailscale update.');
+        return;
+    }
 
     chrome.storage.sync.get(['domainSettings'], function(data) {
         const domainSettings = data.domainSettings || {};
@@ -123,7 +137,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         }
     }
 });
-
 
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
     console.log('Tab removed. TabId:', tabId);
