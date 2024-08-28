@@ -1,0 +1,62 @@
+:root {
+    --accent-color: #598db2;
+    --bg-color: #1e1e1e;
+    --text-color: #e0e0e0;
+    --input-bg-color: #333;
+    --button-bg-color: #598db2;
+    --rm-button-bg-color: #ff5722;
+    --button-hover-color: #598db2c4;
+    --rm-button-hover-color: #e64a19;
+    --button-text-color: #fff;
+    --icon-size: 24px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    margin: 1em;
+    padding: 10px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+#settingsIcon {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    cursor: pointer;
+    width: var(--icon-size);
+    height: var(--icon-size);
+}
+
+h1 {
+    color: var(--accent-color);
+    margin: 10px 0;
+    font-size: 2.5em;
+}
+
+h3 {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+    font-size: 1em;
+}
+
+.domains {
+    text-align: left;
+    margin: 2em 0 0;
+}
+
+.domain-item {
+    overflow: hidden;
+    white-space: nowrap;
+}
