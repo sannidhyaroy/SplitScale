@@ -1,0 +1,88 @@
+:root {
+    --accent-color: #598db2;
+    --bg-color: #1e1e1e;
+    --text-color: #e0e0e0;
+    --input-bg-color: #333;
+    --button-bg-color: #598db2;
+    --rm-button-bg-color: #ff5722;
+    --button-hover-color: #598db2c4;
+    --rm-button-hover-color: #e64a19;
+    --button-text-color: #fff;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 10px;
+}
+
+h1 {
+    color: var(--accent-color);
+    margin-top: 0.2em;
+    margin-bottom: 0.5em;
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2em;
+    margin-top: 1.8em;
+    margin-bottom: 0.7em;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    padding: 0.5em;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+}
+
+button {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    cursor: pointer;
+}
+
+button.remove {
+    margin-left: 1em;
+    margin-right: 1em;
+    background-color: var(--rm-button-bg-color);
+    height: 2em;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+button.remove:hover {
+    background-color: var(--rm-button-hover-color);
+}
+
+#status {
+    margin-top: 10px;
+}
+
+#domainList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1em;
+}
+
+.domain-item {
+    font-size: 1.3em;
+    overflow: hidden;
+    white-space: nowrap;
+}
