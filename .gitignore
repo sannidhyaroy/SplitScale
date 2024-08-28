@@ -26,9 +26,6 @@ venv/
 target/
 dist/
 
-# Chrome Extension
-extension.*
-
 # JetBrains IDE
 .idea/
 
