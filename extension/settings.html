@@ -2,38 +2,20 @@
 <html>
 <head>
     <title>Settings - SplitScale</title>
-    <style>
-        :root {
-            color: white;
-            background-color: black;
-        }
-        body {
-            font-family: Arial, sans-serif;
-        }
-        input, button {
-            padding: 0.5em;
-            color: white;
-            background-color: #2e2e2e;
-        }
-        #domainList {
-            margin-top: 20px;
-        }
-        .domain-item {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="settings.css">
 </head>
 <body>
     <h1>SplitScale Settings</h1>
-    <div>
+    <div class="input-group">
         <input id="domain" placeholder="Enter domain" type="text" />
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
         </svg>
         <input id="exitNode" placeholder="Enter exit node IP" type="text" />
         <button id="add">Add</button>
     </div>
     <div id="status"></div>
+    <h2>Mapped domains:</h2>
     <div id="domainList"></div>
     <script src="settings.js"></script>
 </body>
