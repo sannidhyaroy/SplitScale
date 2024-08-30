@@ -4,7 +4,7 @@ A Split Tunneling Solution through Tailscale based on domain matching
 ### Prerequisites (will be covered in Instructions):
 - A Tailscale Account
 - Tailscale CLI configured on your system. The daemon controls Tailscale through the CLI interface, so this is necessary.
-- A Chromium Browser (example: Google Chrome, Chromium, Brave, Arc, etc.). Gecko browsers aren't yet tested.
+- A Chromium or Gecko based Browser. Safari isn't yet tested.
 - A working brain 🧠, some courage, and patience to deal with this alpha project and read the documentation.
 ---
 
@@ -13,6 +13,9 @@ A Split Tunneling Solution through Tailscale based on domain matching
 - macOS
 - Linux (recommended as it's actively tested)
 ---
+
+### Installation:
+[<img src="assets/amo.svg" alt="Get the Addon" width="256px"/>](https://addons.mozilla.org/firefox/addon/splitscale)
 
 ### Instructions:
 
