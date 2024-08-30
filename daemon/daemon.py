@@ -14,9 +14,9 @@ def run_command(command):
 def tailscale_up():
     exit_node = request.json.get('exit_node')
     if exit_node:
-        command = f'tailscale up --accept-routes --exit-node={exit_node}'
+        command = f'tailscale up --reset --operator=$USER --accept-routes --exit-node={exit_node}'
     else:
-        command = 'tailscale up --accept-routes'
+        command = 'tailscale up --reset --operator=$USER --accept-routes'
 
     output, error = run_command(command)
 
