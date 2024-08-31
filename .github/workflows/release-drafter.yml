@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, reopened, synchronize]
-  # pull_request_target event is required for autolabeler to support PRs from forks
-  # pull_request_target:
-  #   types: [opened, reopened, synchronize]
 
 permissions:
   contents: read
@@ -19,12 +14,49 @@ jobs:
       contents: write
       pull-requests: write
     runs-on: ubuntu-latest
+    name: Release Drafter
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       # Drafts your next Release notes as Pull Requests are merged into "main"
-      - uses: release-drafter/release-drafter@v6
+      - name: Draft Release
+        id: release-drafter
+        uses: release-drafter/release-drafter@v6
         # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
         # with:
         #   config-name: my-config.yml
         #   disable-autolabeler: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # pack zip and read manifest, can be reused in the following steps
+      - name: Pack ZIP
+        id: packExtensionDir
+        uses: cardinalby/webext-buildtools-pack-extension-dir-action@v1
+        with:
+          extensionDir: 'extension'
+          zipFilePath: 'build/extension.zip'
+        
+      - name: Build CRX
+        uses: cardinalby/webext-buildtools-chrome-crx-action@v2
+        with:
+          # zip file made at the packExtensionDir step
+          zipFilePath: 'build/extension.zip'
+          crxFilePath: 'build/extension.crx'
+          privateKey: ${{secrets.CHROME_CRX_PRIVATE_KEY}}
+          # The following is optional if you need updates.xml file
+          updateXmlPath: 'build/updates.xml'
+          updateXmlCodebaseUrl: 'https://github.com/sannidhyaroy/SplitScale/releases/latest/download/extension.crx'
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          files: 'build/extension.crx'
+          
+      - name: Upload CRX as Release Asset
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.release-drafter.outputs.upload_url }}
+          asset_name: 'extension.crx'
+          asset_path: 'build/extension.crx'
