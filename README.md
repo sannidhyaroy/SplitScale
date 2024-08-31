@@ -15,7 +15,8 @@ A Split Tunneling Solution through Tailscale based on domain matching
 ---
 
 ## Installation
-[<img src="assets/amo.svg" alt="Get the Addon" width="256px"/>](https://addons.mozilla.org/firefox/addon/splitscale)
+[<img src="assets/github.png" alt="Get on GitHub" width="350px"/>](https://github.com/sannidhyaroy/SplitScale/releases/latest)
+[<img src="assets/amo.svg" alt="Get the Addon" width="256px" style="padding: 20px;"/>](https://addons.mozilla.org/firefox/addon/splitscale)
 ---
 
 ## Quick Start
