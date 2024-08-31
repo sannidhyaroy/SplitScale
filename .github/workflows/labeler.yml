@@ -1,4 +1,4 @@
-name: Labeler
+name: Label Manager
 
 on:
 - issues
@@ -7,12 +7,14 @@ on:
 jobs:
   assign-labels:
     permissions:
+      contents: read
       issues: write
       pull-requests: write
     runs-on: ubuntu-latest
     name: Assign labels
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 

@@ -65,4 +65,5 @@ jobs:
           upload_url: ${{ steps.release-drafter.outputs.upload_url }}
           asset_name: 'extension.crx'
           asset_path: 'build/extension.crx'
+          overwrite: true
         if: steps.build.outcome == 'success'
