@@ -1,12 +1,12 @@
 version: 1
 labels:
 - label: "bug"
-  title: "^(?:'|\"|`)?(fix|fixes|fixed|bug|issue)(?:\([^\)]*\))?!?(?:'|\"|`)?(?=:)"
+  title: "^[`'"]?(fix|fixes|fixed|bug|issue)(?:\([^\(\)]+\))?!?[`'"]?:"
 - label: "enhancement"
-  title: "^(?:'|\"|`)?(feat|features|feature|enhancement|perf)(?:\([^\)]*\))?!?(?:'|\"|`)?(?=:)"
+  title: "^[`'"]?(feat|features|feature|enhancement|perf)(?:\([^\(\)]+\))?!?[`'"]?:"
 - label: "chore"
-  title: "^(?:'|\"|`)?(chore|build|ci|cd|ops|dev-ops)(?:\([^\)]*\))?!?(?:'|\"|`)?(?=:)"
+  title: "^[`'"]?(chore|build|ci|cd|ops|dev-ops)(?:\([^\(\)]+\))?!?[`'"]?:"
 - label: "documentation"
-  title: "^(?:'|\"|`)?(docs|documentation|doc)(?:\([^\)]*\))?!?(?:'|\"|`)?(?=:)"
+  title: "^[`'"]?(docs|documentation|doc)(?:\([^\(\)]+\))?!?[`'"]?:"
 - label: "needs-alert"
-  title: "^(?:'|\"|`)?(?:build|ci|docs|feat|fix|perf|refactor|revert|style|test|misc)(?:\([^\)]*\))?(!)(?:'|\"|`)?(?=:)"
+  title: "^[`'"]?(?:build|ci|docs|feat|fix|perf|refactor|revert|style|test|misc)(?:\([^\(\)]+\))?(!)[`'"]?:"
