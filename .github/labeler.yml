@@ -1,12 +1,12 @@
 version: 1
 labels:
   - label: "bug"
-    title: "^[`]?(fix|fixes|fixed|bug|issue)(?:\([^\(\)]+\))?!?[`]?:"
+    title: "^[\x60\x27\x22]?(fix|fixes|fixed|bug|issue)(?:\\([^\\(\\)]+\\))?!?[\x60\x27\x22]?:"
   - label: "enhancement"
-    title: "^[`]?(feat|features|feature|enhancement|perf)(?:\([^\(\)]+\))?!?[`]?:"
+    title: "^[\x60\x27\x22]?(feat|features|feature|enhancement|perf)(?:\\([^\\(\\)]+\\))?!?[\x60\x27\x22]?:"
   - label: "chore"
-    title: "^[`]?(chore|build|ci|cd|ops|dev-ops)(?:\([^\(\)]+\))?!?[`]?:"
+    title: "^[\x60\x27\x22]?(chore|build|ci|cd|ops|dev-ops)(?:\\([^\\(\\)]+\\))?!?[\x60\x27\x22]?:"
   - label: "documentation"
-    title: "^[`]?(docs|documentation|doc)(?:\([^\(\)]+\))?!?[`]?:"
+    title: "^[\x60\x27\x22]?(docs|documentation|doc)(?:\\([^\\(\\)]+\\))?!?[\x60\x27\x22]?:"
   - label: "needs-alert"
-    title: "^[`]?(?:build|ci|docs|feat|fix|perf|refactor|revert|style|test|misc)(?:\([^\(\)]+\))?(!)[`]?:"
+    title: "^[\x60\x27\x22]?(?:build|ci|docs|feat|fix|perf|refactor|revert|style|test|misc)(?:\\([^\\(\\)]+\\))?(!)[\x60\x27\x22]?:"
