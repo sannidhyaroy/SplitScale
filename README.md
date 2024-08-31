@@ -1,7 +1,7 @@
 # SplitScale
 A Split Tunneling Solution through Tailscale based on domain matching
 
-### Prerequisites (will be covered in Instructions):
+### Prerequisites (covered in Instructions):
 - A Tailscale Account
 - Tailscale CLI configured on your system. The daemon controls Tailscale through the CLI interface, so this is necessary.
 - A Chromium or Gecko based Browser. Safari isn't yet tested.
@@ -16,6 +16,37 @@ A Split Tunneling Solution through Tailscale based on domain matching
 
 ### Installation:
 [<img src="assets/amo.svg" alt="Get the Addon" width="256px"/>](https://addons.mozilla.org/firefox/addon/splitscale)
+---
+
+### Quick Start
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/sannidhyaroy/SplitScale.git
+    ```
+2.  **Navigate into the repository root folder**:
+    ```bash
+    cd SplitScale
+    ```
+3.  **Setup Python Virtual Environment**:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  #for macOS and Linux
+    venv\Scripts\activate     #for Windows
+    ```
+4.  **Install Flask**:
+    ```bash
+    pip install Flask
+    ```
+5.  **Run the daemon**:
+    ```bash
+    python daemon/daemon.py
+    ```
+6.  **Install the SplitScale extension**:
+    Install from Store or load the `extension` directory as an unpacked extension.
+7.  **Configure the extension**:
+    Add some domains to exit-node mappings in the extension
+8.  **Profit!!**
+---
 
 ### Instructions:
 
