@@ -147,8 +147,19 @@ A Split Tunneling Solution through Tailscale based on domain matching
             ```bash
             sudo systemctl disable splitscale
             ```
-8.  **Load the extension**:
-    - Open you browser (based on Chromium), navigate to `chrome://extensions` (browsers may rewrite the url as necessary, if it isn't Chrome). Then turn on `Developer Mode` toggle and click `Load Unpacked`. Choose the `extensions` directory inside this repository.
+8.  **Install/Load the extension**:
+    - For signed extension:
+      1.  Firefox (or other Gecko-based browsers):
+          - Easiest and recommended way to install SplitScale addon is from the [AMO (addons.mozilla.org)](https://addons.mozilla.org/firefox/addon/splitscale).
+          - For manually installing a Firefox addon from a `.xpi` file, download the `.xpi` provided in the [Releases Page](https://github.com/sannidhyaroy/SplitScale/releases/latest).
+      2.  Chrome (or other Chromium-based browsers):
+          - Download the `.crx` file provided in the [Releases Page](https://github.com/sannidhyaroy/SplitScale/releases/latest).
+          - Navigate to `chrome://extensions` (other Chromium-based browsers will redirect to the appropriate url) and drag and drop the `.crx` file into the browser. If should ask you to confirm installing the extension.
+    - For unpacked extension:
+      1.  Chrome:
+          - Open you browser (based on Chromium), navigate to `chrome://extensions` (other Chromium-based browsers will redirect to the appropriate url).
+          - Turn on `Developer Mode` toggle and click `Load Unpacked`.
+          - Choose the `extensions` directory inside this repository.
 9.  **Configure the extension**:
     - Navigate to the `SplitScale` Extension Settings Page and map required domains to an exit-node IP. You can obtain the exit-node IP address of a device by running `tailscale status` and noting down the IP of the device advertising as exit node.
     - Test by visiting one of the configured domains. The extension should sent a request to the daemon process to use the configured device as an exit-node.
