@@ -23,5 +23,6 @@
     "128": "icons/icon128.png"
   },
   
-  "options_page": "settings.html"
+  "options_page": "settings.html",
+  "update_url": "https://sannidhyaroy.github.io/SplitScale/build/updates.xml"
 }
