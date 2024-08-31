@@ -14,7 +14,7 @@ categories:
   - title: '🧰 Maintenance:'
     label: 'chore'
   - title:  '📖 Documentation:'
-    label:
+    labels:
       - 'docs'
       - 'documentation'
 exclude-labels:
@@ -31,7 +31,7 @@ version-resolver:
   patch:
     labels:
       - 'patch'
-  default: patch
+  default: minor
 template: |
   # ✨ What's Changed:
 
