@@ -10,5 +10,7 @@ labels:
     title: "^[\x60\x27\x22]?(docs|documentation|doc)(?:\\([^\\(\\)]+\\))?!?[\x60\x27\x22]?:"
   - label: "revert"
     title: "^[\x60\x27\x22]?(revert)(?:\\([^\\(\\)]+\\))?!?[\x60\x27\x22]?:"
+  - label: "revert"
+    title: "^(Revert)[[:space:]](?:\x22[^[:cntrl:]]+\x22)"
   - label: "needs-alert"
     title: "^[\x60\x27\x22]?(?:build|ci|docs|feat|fix|perf|refactor|revert|style|test|misc)(?:\\([^\\(\\)]+\\))?(!)[\x60\x27\x22]?:"
