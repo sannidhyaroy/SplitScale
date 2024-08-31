@@ -1,4 +1,4 @@
-name-template: 'v$RESOLVED_VERSION 🔖'
+name-template: 'SplitScale v$RESOLVED_VERSION 🐬'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
   - title: '🚀 Enhancements:'
@@ -33,6 +33,6 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## ✨ What's Changed:
+  # ✨ What's Changed:
 
   $CHANGES
