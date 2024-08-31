@@ -1,24 +1,24 @@
 # SplitScale
 A Split Tunneling Solution through Tailscale based on domain matching
 
-### Prerequisites (covered in Instructions):
+## Prerequisites (covered in Instructions)
 - A Tailscale Account
 - Tailscale CLI configured on your system. The daemon controls Tailscale through the CLI interface, so this is necessary.
 - A Chromium or Gecko based Browser. Safari isn't yet tested.
 - A working brain 🧠, some courage, and patience to deal with this alpha project and read the documentation.
 ---
 
-### Compatibility:
+## Compatibility
 - Windows
 - macOS
 - Linux (recommended as it's actively tested)
 ---
 
-### Installation:
+## Installation
 [<img src="assets/amo.svg" alt="Get the Addon" width="256px"/>](https://addons.mozilla.org/firefox/addon/splitscale)
 ---
 
-### Quick Start
+## Quick Start
 1.  **Clone the Repository**:
     ```bash
     git clone https://github.com/sannidhyaroy/SplitScale.git
@@ -48,7 +48,7 @@ A Split Tunneling Solution through Tailscale based on domain matching
 8.  **Profit!!**
 ---
 
-### Instructions:
+## Instructions
 
 1.  **Install Tailscale**: 
     - Follow the instructions on [Tailscale's Download Page](https://tailscale.com/download) to install the Tailscale client or CLI. There is no official GUI for Linux, unlike on Windows and macOS. The Tailscale CLI is packaged inside the GUI Client on Windows and macOS, which might need additional configuration to access it. Refer to [Tailscale Docs](https://tailscale.com/kb/1080/cli) for more information. You need at least two devices (one as an exit-node, and the other as a client) where you want to route through the exit-node.
@@ -151,12 +151,15 @@ A Split Tunneling Solution through Tailscale based on domain matching
     - For signed extension:
       1.  Firefox (or other Gecko-based browsers):
           - Easiest and recommended way to install SplitScale addon is from the [AMO (addons.mozilla.org)](https://addons.mozilla.org/firefox/addon/splitscale).
-          - For manually installing a Firefox addon from a `.xpi` file, download the `.xpi` provided in the [Releases Page](https://github.com/sannidhyaroy/SplitScale/releases/latest).
+          - For manually installing a Firefox addon, download the `.crx` provided in the [Releases Page](https://github.com/sannidhyaroy/SplitScale/releases/latest) and navigate to `about:debugging > This Firefox > Load Temporary Add-on...` and select the `.crx` file.
       2.  Chrome (or other Chromium-based browsers):
           - Download the `.crx` file provided in the [Releases Page](https://github.com/sannidhyaroy/SplitScale/releases/latest).
           - Navigate to `chrome://extensions` (other Chromium-based browsers will redirect to the appropriate url) and drag and drop the `.crx` file into the browser. If should ask you to confirm installing the extension.
     - For unpacked extension:
-      1.  Chrome:
+      1.  Firefox:
+          - Create a zip archive containing all the files in the `extension` directory.
+          - Navigate to `about:debugging > This Firefox > Load Temporary Add-on...` and select the `.zip` file.
+      2.  Chrome:
           - Open you browser (based on Chromium), navigate to `chrome://extensions` (other Chromium-based browsers will redirect to the appropriate url).
           - Turn on `Developer Mode` toggle and click `Load Unpacked`.
           - Choose the `extensions` directory inside this repository.
@@ -165,7 +168,7 @@ A Split Tunneling Solution through Tailscale based on domain matching
     - Test by visiting one of the configured domains. The extension should sent a request to the daemon process to use the configured device as an exit-node.
 ---
 
-### Security & Privacy Considerations:
+## Security & Privacy Considerations
 - The SplitScale Daemon runs locally on port 5000, which is why for local control of Tailscale, Flask’s built-in server should be sufficient. Ensure your setup is secure and the port isn't exposed. Only run it on trusted networks and keep it accessible only from localhost to prevent unauthorized access. If users need a more robust local setup, use a production-ready WSGI server like Gunicorn (optional):
   - Install Gunicorn:
     ```bash
@@ -179,5 +182,5 @@ A Split Tunneling Solution through Tailscale based on domain matching
 - Tailscale is a partially open-source tool with some proprietary components, such as the Tailscale Coordination Server. Our project works with Tailscale’s existing setup and does not modify or distribute Tailscale’s proprietary software. Users must comply with Tailscale’s terms of service and licensing. For a fully open-source alternative to Tailscale’s coordination server, users might consider using [Headscale](https://github.com/juanfont/headscale). The instructions provided for this project assumes you're using the default Tailscale Coordination Server and their official client apps or cli, but it should work with Headscale as well. Read more at ["Open-Source at Tailscale"](https://tailscale.com/opensource).
 ---
 
-### License
+## License
 SplitScale is licensed under the [GNU Affero General Public License (AGPL) v3.0](https://github.com/sannidhyaroy/SplitScale/blob/main/LICENSE).
