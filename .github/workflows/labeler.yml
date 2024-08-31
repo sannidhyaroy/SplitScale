@@ -4,15 +4,23 @@ on:
   pull_request:
     branches: [main]
     types:
-      [opened, reopened, labeled, unlabeled]
+      [opened, reopened, synchronize, labeled, unlabeled]
+  pull_request_target:
+    types:
+      [opened, reopened, synchronize, labeled, unlabeled]
 
 jobs:
   assign-labels:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     name: Assign labels in pull request
     if: github.event.pull_request.merged == false
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Execute assign labels
         id: action-assign-labels
