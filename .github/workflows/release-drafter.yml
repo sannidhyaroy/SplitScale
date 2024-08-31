@@ -39,6 +39,7 @@ jobs:
           zipFilePath: 'build/extension.zip'
         
       - name: Build CRX
+        id: build
         uses: cardinalby/webext-buildtools-chrome-crx-action@v2
         with:
           # zip file made at the packExtensionDir step
@@ -52,7 +53,11 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          files: 'build/extension.crx'
+          name: 'extension'
+          path: 'build/extension.crx'
+          if-no-files-found: warn
+        continue-on-error: true
+        if: steps.build.outcome == 'success'
           
       - name: Upload CRX as Release Asset
         uses: shogo82148/actions-upload-release-asset@v1
@@ -60,3 +65,4 @@ jobs:
           upload_url: ${{ steps.release-drafter.outputs.upload_url }}
           asset_name: 'extension.crx'
           asset_path: 'build/extension.crx'
+        if: steps.build.outcome == 'success'
