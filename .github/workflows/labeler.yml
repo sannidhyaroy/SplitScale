@@ -20,10 +20,10 @@ jobs:
 
       - name: Assign labels
         id: action-assign-labels
-        uses: srvaroa/labeler@v1
+        uses: srvaroa/labeler@master
         with:
           config_path: .github/labeler.yml
-          use_local_config: false
+          use_local_config: true
           fail_on_error: false
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
