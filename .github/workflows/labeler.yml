@@ -1,4 +1,4 @@
-name: Labeler
+name: Label Manager
 
 on:
 - issues
@@ -7,21 +7,23 @@ on:
 jobs:
   assign-labels:
     permissions:
+      contents: read
       issues: write
       pull-requests: write
     runs-on: ubuntu-latest
     name: Assign labels
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Assign labels
         id: action-assign-labels
-        uses: srvaroa/labeler@v1
+        uses: srvaroa/labeler@master
         with:
           config_path: .github/labeler.yml
           use_local_config: false
-          fail_on_error: false
+          fail_on_error: true
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
