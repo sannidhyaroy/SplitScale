@@ -91,13 +91,13 @@ function handleDomainForTab(tabId, domain) {
                 console.log('Domain already in activeDomains, but current exit-node incorrect. Updating exit-node to ', exitNode);
                 updateTailscaleState(true, exitNode);
             }
+            // else check if tailscale is active to address edge cases where tailscale is inactive
         } else {
             console.log('No domain settings found for:', domain);
 
             if (activeDomains.has(domain)) {
                 console.log('Removing domain from activeDomains:', domain);
                 activeDomains.delete(domain);
-                delete tabDomainMap[tabId];
 
                 if (activeDomains.size === 0) {
                     console.log('No more active domains. Disabling Tailscale.');
@@ -128,10 +128,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
         // Remove the old domain from activeDomains if it exists
         if (oldDomain && oldDomain !== newDomain && activeDomains.has(oldDomain)) {
-            console.log('Removing old domain from activeDomains:', oldDomain);
-            activeDomains.delete(oldDomain);
-
-            // If no other tabs are using the old domain, disable Tailscale for that domain
+            // If no other tabs are using the old domain, remove it from activeDomains
             let oldDomainStillActive = false;
             for (let id in tabDomainMap) {
                 if (tabDomainMap[id] === oldDomain) {
@@ -140,9 +137,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 }
             }
             if (!oldDomainStillActive) {
-                console.log('No more tabs using old domain:', oldDomain, 'Disabling Tailscale for it.');
-                updateTailscaleState(false);
+                console.log(`No more tabs using old domain. Removing ${oldDomain} from activeDomains`);
+                activeDomains.delete(oldDomain);
             }
+
         }
 
         // Add the new domain to activeDomains and update the map
@@ -158,38 +156,20 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 
     const removedDomain = tabDomainMap[tabId];
     if (removedDomain && activeDomains.has(removedDomain)) {
-        console.log('Removing domain from activeDomains on tab removal:', removedDomain);
-        activeDomains.delete(removedDomain);
         delete tabDomainMap[tabId];
 
-        // Check for remaining active domains
-        chrome.tabs.query({}, function(tabs) {
-            const remainingDomains = new Set();
-            tabs.forEach(t => {
-                const domain = extractDomain(t.url);
-                if (activeDomains.has(domain)) {
-                    remainingDomains.add(domain);
-                }
-            });
+        // Check if removedDomain is still in use by other tabs
+        if (!Object.values(tabDomainMap).includes(removedDomain)) {
+            console.log(`Removing ${removedDomain} from activeDomains as no other tab is using it`);
+            activeDomains.delete(removedDomain);
+        } else {
+            console.log('Other tabs are still using this domain. Preserving it in activeDomains...');
+        }
 
-            if (remainingDomains.size > 0) {
-                console.log('Switching Tailscale to the remaining active domain.');
-                const remainingDomain = [...remainingDomains][0]; // Choose one of the remaining domains
-                chrome.storage.sync.get(['domainSettings'], function(data) {
-                    const domainSettings = data.domainSettings || {};
-                    if (domainSettings[remainingDomain]) {
-                        const exitNode = domainSettings[remainingDomain].exitNode;
-                        updateTailscaleState(true, exitNode);
-                    }
-                });
-            } else {
-                console.log('No active domains remaining. Disabling Tailscale.');
-                updateTailscaleState(false);
-            }
-        });
-    }
-    if (activeDomains.size === 0) {
-        console.log('No active domains remaining. Disabling Tailscale.');
-        updateTailscaleState(false);
+        // Disable Tailscale, when no activeDomains are present
+        if (activeDomains.size === 0) {
+            console.log('No active domains remaining. Disabling Tailscale.');
+            updateTailscaleState(false);
+        }
     }
 });
