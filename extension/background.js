@@ -18,7 +18,7 @@ function extractDomain(url) {
     }
 }
 
-async function updateTailscaleState(shouldEnable, exitNode = null) {
+async function updateTailscaleState(shouldEnable, exitNode = null, refreshTabID = null) {
     console.log('updateTailscaleState called with shouldEnable:', shouldEnable, 'and exitNode:', exitNode);
 
     if (shouldEnable) {
@@ -39,6 +39,10 @@ async function updateTailscaleState(shouldEnable, exitNode = null) {
             if (response.ok) {
                 currentExitNode = exitNode;
                 console.log('Tailscale enabled for domain:', exitNode);
+                if (refreshTabID) {
+                    console.log(`Tab ID ${refreshTabID} will be refreshed...`);
+                    chrome.tabs.reload(refreshTabID); // Reload tab
+                }
             } else {
                 console.error('Failed to enable Tailscale. Status:', response.status, 'Status Text:', response.statusText);
             }
@@ -67,7 +71,7 @@ function handleDomainForTab(tabId, domain) {
     console.log('handleDomainForTab called with tabId:', tabId, 'and domain:', domain);
 
     if (!domain) {
-        console.warn('Domain is null or undefined, skipping Tailscale update.');
+        console.log('Domain is null or undefined, skipping Tailscale update.');
         return;
     }
 
@@ -82,7 +86,7 @@ function handleDomainForTab(tabId, domain) {
                 console.log('Adding domain to activeDomains and enabling Tailscale:', domain);
                 activeDomains.add(domain);
                 tabDomainMap[tabId] = domain; // Map the domain to the tab
-                updateTailscaleState(true, exitNode);
+                updateTailscaleState(true, exitNode, tabId);
             } else if (!(currentExitNode === exitNode)) {
                 console.log('Domain already in activeDomains, but current exit-node incorrect. Updating exit-node to ', exitNode);
                 updateTailscaleState(true, exitNode);
