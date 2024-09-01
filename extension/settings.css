@@ -59,7 +59,6 @@ button.remove {
     margin-left: 1em;
     margin-right: 1em;
     background-color: var(--rm-button-bg-color);
-    height: 2em;
 }
 
 button:hover {
