@@ -104,6 +104,17 @@ function handleDomainForTab(tabId, domain) {
     });
 }
 
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    // Handle onActive tab changed
+    chrome.tabs.get(activeInfo.tabId, (tab) => {
+        const activeDomain = extractDomain(tab.url);
+        if (activeDomain) {
+            console.log(`Active Tab changed to ${activeDomain} for tab id ${activeInfo.tabId}`);
+            handleDomainForTab(activeInfo.tabId, activeDomain);
+        }
+    });
+});
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete') {
         const newDomain = extractDomain(tab.url);
